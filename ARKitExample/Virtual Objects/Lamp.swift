@@ -11,7 +11,7 @@ import ARKit
 class Lamp: VirtualObject {
 	
 	override init() {
-		super.init(modelName: "lamp", fileExtension: "scn", thumbImageFilename: "lamp", title: "Lamp")
+		super.init(modelName: "lamp", fileExtension: "scn", thumbImageFilename: "lamp", title: "地灯")
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

@@ -177,24 +177,30 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
 
         let isRecoverable = (arError.code == .worldTrackingFailed)
 		if isRecoverable {
-			sessionErrorMsg += "\nYou can try resetting the session or quit the application."
+            //You can try resetting the session or quit the application.
+			sessionErrorMsg += "\n你可以尝试重新设置会话或退出应用程序。"
 		} else {
-			sessionErrorMsg += "\nThis is an unrecoverable error that requires to quit the application."
+            //This is an unrecoverable error that requires to quit the application.
+			sessionErrorMsg += "\n这是一个不可恢复的错误，需要退出应用程序。"
 		}
-		
-		displayErrorMessage(title: "We're sorry!", message: sessionErrorMsg, allowRestart: isRecoverable)
+        
+        //We're sorry!
+		displayErrorMessage(title: "很抱歉", message: sessionErrorMsg, allowRestart: isRecoverable)
 	}
 	
 	func sessionWasInterrupted(_ session: ARSession) {
 		textManager.blurBackground()
-		textManager.showAlert(title: "Session Interrupted", message: "The session will be reset after the interruption has ended.")
+        //Session Interrupted
+        //The session will be reset after the interruption has ended.
+		textManager.showAlert(title: "会话中断", message: "中断结束后，会话将被重置。")
 	}
 		
 	func sessionInterruptionEnded(_ session: ARSession) {
 		textManager.unblurBackground()
 		session.run(sessionConfig, options: [.resetTracking, .removeExistingAnchors])
 		restartExperience(self)
-		textManager.showMessage("RESETTING SESSION")
+        //RESETTING SESSION
+		textManager.showMessage("正在重置会话")
 	}
 	
     // MARK: - Ambient Light Estimation
@@ -280,13 +286,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
 		
 		let distance = String(format: "%.2f", distanceToUser)
 		let scale = String(format: "%.2f", object.scale.x)
-		textManager.showDebugMessage("Distance: \(distance) m\nRotation: \(angleDegrees)°\nScale: \(scale)x")
+        //Distance Rotation Scale
+		textManager.showDebugMessage("距离: \(distance) m\n旋转: \(angleDegrees)°\n缩放: \(scale)x")
 	}
 	
 	func moveVirtualObjectToPosition(_ pos: SCNVector3?, _ instantly: Bool, _ filterPosition: Bool) {
 		
 		guard let newPosition = pos else {
-			textManager.showMessage("CANNOT PLACE OBJECT\nTry moving left or right.")
+            // CANNOT PLACE OBJECT\nTry moving left or right.
+			textManager.showMessage("无法放置对象\n尝试左右移动手机")
 			// Reset the content selection in the menu only if the content has not yet been initially placed.
 			if virtualObject == nil {
 				resetVirtualObject()
@@ -472,7 +480,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
 		// Drop the object onto the plane if it is near it.
 		let verticalAllowance: Float = 0.03
 		if objectPos.y > -verticalAllowance && objectPos.y < verticalAllowance {
-			textManager.showDebugMessage("OBJECT MOVED\nSurface detected nearby")
+            //OBJECT MOVED\nSurface detected nearby
+			textManager.showDebugMessage("对象移动了\n附近检测到平面")
 			
 			SCNTransaction.begin()
 			SCNTransaction.animationDuration = 0.5
@@ -575,7 +584,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
     func addPlane(node: SCNNode, anchor: ARPlaneAnchor) {
 		
 		let pos = SCNVector3.positionFromTransform(anchor.transform)
-		textManager.showDebugMessage("NEW SURFACE DETECTED AT \(pos.friendlyString())")
+        //NEW SURFACE DETECTED AT
+		textManager.showDebugMessage("检测到新平面在 \(pos.friendlyString())")
         
 		let plane = Plane(anchor, showDebugVisuals)
 		
@@ -583,9 +593,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
 		node.addChildNode(plane)
 		
 		textManager.cancelScheduledMessage(forType: .planeEstimation)
-		textManager.showMessage("SURFACE DETECTED")
+        //SURFACE DETECTED
+		textManager.showMessage("检测到平面")
 		if virtualObject == nil {
-			textManager.scheduleMessage("TAP + TO PLACE AN OBJECT", inSeconds: 7.5, messageType: .contentPlacement)
+            //TAP + TO PLACE AN OBJECT
+			textManager.scheduleMessage("点击+来放置一个对象", inSeconds: 7.5, messageType: .contentPlacement)
 		}
 	}
 		
@@ -678,7 +690,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
 		}
 		
 		DispatchQueue.main.async {
-			self.featurePointCountLabel.text = "Features: \(cloud.count)".uppercased()
+            //Features
+			self.featurePointCountLabel.text = "特征: \(cloud.count)".uppercased()
 		}
 	}
 	
@@ -782,8 +795,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
 		case .authorized:
 			takeScreenshotBlock()
 		case .restricted, .denied:
-			let title = "Photos access denied"
-			let message = "Please enable Photos access for this application in Settings > Privacy to allow saving screenshots."
+            //Photos access denied
+			let title = "照片拒绝访问"
+            //Please enable Photos access for this application in Settings > Privacy to allow saving screenshots.
+			let message = "请允许在设置中使用该应用程序的照片访问权限，以便保存截图。"
 			textManager.showAlert(title: title, message: message)
 		case .notDetermined:
 			PHPhotoLibrary.requestAuthorization({ (authorizationStatus) in
@@ -806,7 +821,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, UIPopoverPresentation
 		
 		let barButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
 		settingsViewController.navigationItem.rightBarButtonItem = barButtonItem
-		settingsViewController.title = "Options"
+		settingsViewController.title = "选项"
 		
 		let navigationController = UINavigationController(rootViewController: settingsViewController)
 		navigationController.modalPresentationStyle = .popover

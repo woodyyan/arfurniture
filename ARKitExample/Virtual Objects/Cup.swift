@@ -10,7 +10,7 @@ import Foundation
 class Cup: VirtualObject {
 	
 	override init() {
-		super.init(modelName: "cup", fileExtension: "scn", thumbImageFilename: "cup", title: "Cup")
+		super.init(modelName: "cup", fileExtension: "scn", thumbImageFilename: "cup", title: "茶杯")
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
